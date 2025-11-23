@@ -10,6 +10,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation("info.picocli:picocli:4.7.7")
+}
+
 application {
     mainClass = "hexlet.code.App"
 }
