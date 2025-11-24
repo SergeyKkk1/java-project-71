@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.differ.Differ;
 import hexlet.code.parse.JsonParser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -33,8 +34,6 @@ public class App implements Callable {
 
     @Override
     public Object call() throws Exception {
-        System.out.println(filePath1);
-        System.out.println(filePath2);
         if (filePath1 == null || filePath2 == null || filePath1.isEmpty() || filePath2.isEmpty()) {
             throw new IllegalArgumentException("filePath1 or filePath2 is empty");
         }
@@ -49,8 +48,7 @@ public class App implements Callable {
             bufferedReader2.lines().forEach(stringBuilder2::append);
             Map<String, Object> data1 = JsonParser.getData(stringBuilder1.toString());
             Map<String, Object> data2 = JsonParser.getData(stringBuilder2.toString());
-            System.out.println(data1);
-            System.out.println(data2);
+            System.out.println(Differ.generate(data1, data2));
             return "0";
         } else {
             throw new IllegalArgumentException("no files found");
