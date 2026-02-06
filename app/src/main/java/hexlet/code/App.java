@@ -13,11 +13,14 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import static picocli.CommandLine.*;
+import static picocli.CommandLine.Model.CommandSpec;
+import static picocli.CommandLine.Option;
+import static picocli.CommandLine.Parameters;
+import static picocli.CommandLine.Spec;
 
 @Command(name = "gendiff", mixinStandardHelpOptions = true,
         description = "Compares two configuration files and shows a difference.")
-public class App implements Callable {
+public class App implements Callable<String> {
     @Parameters(index = "0", description = "path to first file", paramLabel = "filepath1")
     private String filePath1;
     @Parameters(index = "1", description = "path to second file", paramLabel = "filepath2")
@@ -26,6 +29,9 @@ public class App implements Callable {
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", paramLabel = "format")
     private String outputFormat;
 
+    @Spec
+    private CommandSpec spec;
+
     public static void main(String[] args) {
         App app = new App();
         int exitCode = new CommandLine(app).execute(args);
@@ -33,7 +39,7 @@ public class App implements Callable {
     }
 
     @Override
-    public Object call() throws Exception {
+    public String call() throws Exception {
         if (filePath1 == null || filePath2 == null || filePath1.isEmpty() || filePath2.isEmpty()) {
             throw new IllegalArgumentException("filePath1 or filePath2 is empty");
         }
@@ -48,10 +54,18 @@ public class App implements Callable {
             bufferedReader2.lines().forEach(stringBuilder2::append);
             Map<String, Object> data1 = JsonParser.getData(stringBuilder1.toString());
             Map<String, Object> data2 = JsonParser.getData(stringBuilder2.toString());
-            System.out.println(Differ.generate(data1, data2));
+            this.spec.commandLine().getOut().println(Differ.generate(data1, data2));
             return "0";
         } else {
             throw new IllegalArgumentException("no files found");
         }
+    }
+
+    public CommandSpec getSpec() {
+        return spec;
+    }
+
+    public void setSpec(CommandSpec spec) {
+        this.spec = spec;
     }
 }

@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Differ {
+    private Differ() {
+    }
+
     public static String generate(Map<String, Object> data1, Map<String, Object> data2) {
         List<Map.Entry<String, Object>> deletedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> addedKeys = new ArrayList<>();
@@ -40,7 +43,7 @@ public class Differ {
                 .map(entry -> Map.entry(entry.getKey(), String.format("+ %s: %s", entry.getKey(), entry.getValue())))
                 .toList();
         List<Map.Entry<String, String>> changedKeysToString = new ArrayList<>();
-        for (int i = 0; i < changedKeys.size(); i+=2) {
+        for (int i = 0; i < changedKeys.size(); i += 2) {
             Map.Entry<String, Object> entryFromFirstFile = changedKeys.get(i);
             changedKeysToString.add(Map.entry(entryFromFirstFile.getKey(),
                     String.format("- %s: %s", entryFromFirstFile.getKey(), entryFromFirstFile.getValue())));
