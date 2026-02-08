@@ -10,6 +10,7 @@ public class Formatter {
         return switch (format.toLowerCase()) {
             case "stylish" -> StylishFormatter.getFormattedData(diffResult);
             case "plain" -> PlainFormatter.getFormattedData(diffResult);
+            case "json" -> JsonFormatter.getFormattedData(diffResult);
             default -> throw new IllegalArgumentException("Unknown format: " + format);
         };
     }

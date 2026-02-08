@@ -54,16 +54,25 @@ public class FileCompareTest {
         assertEquals(expectedPlainResult().trim(), actual);
     }
 
+    @Test
+    void testJsonFormat() {
+        int exitCode = cmd.execute("-f", "json",
+                "./src/test/resources/file1.json", "./src/test/resources/file2.json");
+
+        String actual = sw.toString().trim();
+        assertEquals(0, exitCode, "Command should exit with code 0");
+        assertEquals(expectedJsonResult(), actual);
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"", "./src/no/exist/file.json"})
-    void testErrorFilePathError(String filePath) {
+    void testFilePathError(String filePath) {
         int exitCode = cmd.execute(filePath, "./src/test/resources/file2.json");
 
         assertEquals(1, exitCode, "Command should exit with error code");
     }
 
     private String expectedCompareResult() {
-
         return """
                 {
                     chars1: [a, b, c]
@@ -107,5 +116,81 @@ public class FileCompareTest {
                 Property 'setting1' was updated. From 'Some value' to 'Another value'
                 Property 'setting2' was updated. From 200 to 300
                 Property 'setting3' was updated. From true to 'none'""";
+    }
+
+    private String expectedJsonResult() {
+        return """
+                [ {
+                  "key" : "chars1",
+                  "type" : "unchanged",
+                  "value" : [ "a", "b", "c" ]
+                }, {
+                  "key" : "chars2",
+                  "type" : "changed",
+                  "oldValue" : [ "d", "e", "f" ],
+                  "newValue" : false
+                }, {
+                  "key" : "checked",
+                  "type" : "changed",
+                  "oldValue" : false,
+                  "newValue" : true
+                }, {
+                  "key" : "default",
+                  "type" : "changed",
+                  "oldValue" : null,
+                  "newValue" : [ "value1", "value2" ]
+                }, {
+                  "key" : "id",
+                  "type" : "changed",
+                  "oldValue" : 45,
+                  "newValue" : null
+                }, {
+                  "key" : "key1",
+                  "type" : "deleted",
+                  "value" : "value1"
+                }, {
+                  "key" : "key2",
+                  "type" : "added",
+                  "value" : "value2"
+                }, {
+                  "key" : "numbers1",
+                  "type" : "unchanged",
+                  "value" : [ 1, 2, 3, 4 ]
+                }, {
+                  "key" : "numbers2",
+                  "type" : "changed",
+                  "oldValue" : [ 2, 3, 4, 5 ],
+                  "newValue" : [ 22, 33, 44, 55 ]
+                }, {
+                  "key" : "numbers3",
+                  "type" : "deleted",
+                  "value" : [ 3, 4, 5 ]
+                }, {
+                  "key" : "numbers4",
+                  "type" : "added",
+                  "value" : [ 4, 5, 6 ]
+                }, {
+                  "key" : "obj1",
+                  "type" : "added",
+                  "value" : {
+                    "nestedKey" : "value",
+                    "isNested" : true
+                  }
+                }, {
+                  "key" : "setting1",
+                  "type" : "changed",
+                  "oldValue" : "Some value",
+                  "newValue" : "Another value"
+                }, {
+                  "key" : "setting2",
+                  "type" : "changed",
+                  "oldValue" : 200,
+                  "newValue" : 300
+                }, {
+                  "key" : "setting3",
+                  "type" : "changed",
+                  "oldValue" : true,
+                  "newValue" : "none"
+                } ]""";
     }
 }

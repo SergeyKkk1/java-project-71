@@ -21,3 +21,6 @@ make run-dist <filePath1> <filePath2>
 
 ### Plain formatter demo
 [![asciicast](https://asciinema.org/a/V6UuLF8DU4TgBfo6.svg)](https://asciinema.org/a/V6UuLF8DU4TgBfo6)
+
+### JSON formatter demo
+[![asciicast](https://asciinema.org/a/JMWqUiww3FKvuIcd.svg)](https://asciinema.org/a/JMWqUiww3FKvuIcd)
