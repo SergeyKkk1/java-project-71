@@ -11,7 +11,7 @@ public class Differ {
     private Differ() {
     }
 
-    public static String calculateDiffResult(Map<String, Object> data1, Map<String, Object> data2, String outputFormat) {
+    public static String generate(Map<String, Object> data1, Map<String, Object> data2, String outputFormat) {
         List<Map.Entry<String, Object>> deletedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> addedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> changedKeys = new ArrayList<>();

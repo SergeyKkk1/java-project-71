@@ -53,7 +53,7 @@ public class App implements Callable<String> {
             bufferedReader2.lines().forEach(line -> stringBuilder2.append(line).append("\n"));
             Map<String, Object> data1 = Parser.parse(stringBuilder1.toString(), filePath1);
             Map<String, Object> data2 = Parser.parse(stringBuilder2.toString(), filePath2);
-            String diffResult = Differ.calculateDiffResult(data1, data2, outputFormat);
+            String diffResult = Differ.generate(data1, data2, outputFormat);
             this.spec.commandLine().getOut().println(diffResult);
             return "0";
         } else {
