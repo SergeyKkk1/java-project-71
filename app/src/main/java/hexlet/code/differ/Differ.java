@@ -1,5 +1,7 @@
 package hexlet.code.differ;
 
+import hexlet.code.formatter.Formatter;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ public class Differ {
     private Differ() {
     }
 
-    public static DiffResult calculateDiffResult(Map<String, Object> data1, Map<String, Object> data2) {
+    public static String calculateDiffResult(Map<String, Object> data1, Map<String, Object> data2, String outputFormat) {
         List<Map.Entry<String, Object>> deletedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> addedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> changedKeys = new ArrayList<>();
@@ -31,6 +33,6 @@ public class Differ {
                 addedKeys.add(entry);
             }
         }
-        return new DiffResult(deletedKeys, addedKeys, changedKeys, commonKeys);
+        return Formatter.format(new DiffResult(deletedKeys, addedKeys, changedKeys, commonKeys), outputFormat);
     }
 }

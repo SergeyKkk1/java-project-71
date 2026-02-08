@@ -18,3 +18,6 @@ make run-dist <filePath1> <filePath2>
 
 ### Large json files comparison demo
 [![asciicast](https://asciinema.org/a/sh16ZgScrhXwpIP8.svg)](https://asciinema.org/a/sh16ZgScrhXwpIP8)
+
+### Plain formatter demo
+[![asciicast](https://asciinema.org/a/V6UuLF8DU4TgBfo6.svg)](https://asciinema.org/a/V6UuLF8DU4TgBfo6)
