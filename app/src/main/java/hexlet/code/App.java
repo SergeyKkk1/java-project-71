@@ -1,15 +1,8 @@
 package hexlet.code;
 
-import hexlet.code.parse.Parser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.Model.CommandSpec;
@@ -42,23 +35,9 @@ public class App implements Callable<String> {
         if (filePath1 == null || filePath2 == null || filePath1.isEmpty() || filePath2.isEmpty()) {
             throw new IllegalArgumentException("filePath1 or filePath2 is empty");
         }
-        Path path1 = Paths.get(filePath1);
-        Path path2 = Paths.get(filePath2);
-        StringBuilder stringBuilder1 = new StringBuilder();
-        StringBuilder stringBuilder2 = new StringBuilder();
-        if (Files.exists(path1) && Files.exists(path2)) {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath1));
-            BufferedReader bufferedReader2 = new BufferedReader(new FileReader(filePath2));
-            bufferedReader.lines().forEach(line -> stringBuilder1.append(line).append("\n"));
-            bufferedReader2.lines().forEach(line -> stringBuilder2.append(line).append("\n"));
-            Map<String, Object> data1 = Parser.parse(stringBuilder1.toString(), filePath1);
-            Map<String, Object> data2 = Parser.parse(stringBuilder2.toString(), filePath2);
-            String diffResult = Differ.generate(data1, data2, outputFormat);
-            this.spec.commandLine().getOut().println(diffResult);
-            return "0";
-        } else {
-            throw new IllegalArgumentException("no files found");
-        }
+        String diffResult = Differ.generate(filePath1, filePath2, outputFormat);
+        this.spec.commandLine().getOut().println(diffResult);
+        return "0";
     }
 
     public CommandSpec getSpec() {

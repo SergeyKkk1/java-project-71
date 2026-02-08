@@ -1,7 +1,11 @@
 package hexlet.code;
 
 import hexlet.code.formatter.Formatter;
+import hexlet.code.parse.Parser;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +15,24 @@ public class Differ {
     private Differ() {
     }
 
-    public static String generate(Map<String, Object> data1, Map<String, Object> data2, String outputFormat) {
+    public static String generate(String filePath1, String filePath2, String outputFormat) throws Exception {
+        Map<String, Object> data1 = getData(filePath1);
+        Map<String, Object> data2 = getData(filePath2);
+
+        DiffResult diffResult = getDiffResult(data1, data2);
+        return Formatter.format(diffResult, outputFormat);
+    }
+
+    private static Map<String, Object> getData(String filePath) throws Exception {
+        Path path = Paths.get(filePath).toAbsolutePath().normalize();
+        if (!Files.exists(path)) {
+            throw new IllegalArgumentException("File not found: " + filePath);
+        }
+        String content = Files.readString(path);
+        return Parser.parse(content, filePath);
+    }
+
+    private static DiffResult getDiffResult(Map<String, Object> data1, Map<String, Object> data2) {
         List<Map.Entry<String, Object>> deletedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> addedKeys = new ArrayList<>();
         List<Map.Entry<String, Object>> changedKeys = new ArrayList<>();
@@ -33,6 +54,6 @@ public class Differ {
                 addedKeys.add(entry);
             }
         }
-        return Formatter.format(new DiffResult(deletedKeys, addedKeys, changedKeys, commonKeys), outputFormat);
+        return new DiffResult(deletedKeys, addedKeys, changedKeys, commonKeys);
     }
 }
