@@ -23,6 +23,14 @@ public class Differ {
         return Formatter.format(diffResult, outputFormat);
     }
 
+    public static String generate(String filePath1, String filePath2) throws Exception {
+        Map<String, Object> data1 = getData(filePath1);
+        Map<String, Object> data2 = getData(filePath2);
+
+        DiffResult diffResult = getDiffResult(data1, data2);
+        return Formatter.format(diffResult, "stylish");
+    }
+
     private static Map<String, Object> getData(String filePath) throws Exception {
         Path path = Paths.get(filePath).toAbsolutePath().normalize();
         if (!Files.exists(path)) {
