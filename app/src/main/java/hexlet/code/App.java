@@ -1,6 +1,8 @@
 package hexlet.code;
 
+import hexlet.code.differ.DiffResult;
 import hexlet.code.differ.Differ;
+import hexlet.code.formatter.Formatter;
 import hexlet.code.parse.Parser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -26,7 +28,7 @@ public class App implements Callable<String> {
     @Parameters(index = "1", description = "path to second file", paramLabel = "filepath2")
     private String filePath2;
 
-    @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", paramLabel = "format")
+    @Option(names = {"-f", "--format"}, defaultValue = "stylish", description = "output format [default: stylish]", paramLabel = "format")
     private String outputFormat;
 
     @Spec
@@ -54,7 +56,8 @@ public class App implements Callable<String> {
             bufferedReader2.lines().forEach(line -> stringBuilder2.append(line).append("\n"));
             Map<String, Object> data1 = Parser.parse(stringBuilder1.toString(), filePath1);
             Map<String, Object> data2 = Parser.parse(stringBuilder2.toString(), filePath2);
-            this.spec.commandLine().getOut().println(Differ.generate(data1, data2));
+            DiffResult diffResult = Differ.calculateDiffResult(data1, data2);
+            this.spec.commandLine().getOut().println(Formatter.format(diffResult, outputFormat));
             return "0";
         } else {
             throw new IllegalArgumentException("no files found");
