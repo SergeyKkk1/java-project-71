@@ -2,7 +2,7 @@ package hexlet.code.formatter;
 
 import hexlet.code.DiffResult;
 
-public class Formatter {
+public final class Formatter {
     private Formatter() {
     }
 

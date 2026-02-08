@@ -12,13 +12,14 @@ import static picocli.CommandLine.Spec;
 
 @Command(name = "gendiff", mixinStandardHelpOptions = true,
         description = "Compares two configuration files and shows a difference.")
-public class App implements Callable<String> {
+public final class App implements Callable<String> {
     @Parameters(index = "0", description = "path to first file", paramLabel = "filepath1")
     private String filePath1;
     @Parameters(index = "1", description = "path to second file", paramLabel = "filepath2")
     private String filePath2;
 
-    @Option(names = {"-f", "--format"}, defaultValue = "stylish", description = "output format [default: stylish]", paramLabel = "format")
+    @Option(names = {"-f", "--format"}, defaultValue = "stylish", description = "output format [default: stylish]",
+            paramLabel = "format")
     private String outputFormat;
 
     @Spec
