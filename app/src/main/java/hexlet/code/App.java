@@ -3,6 +3,7 @@ package hexlet.code;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import java.io.PrintWriter;
 import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.Model.CommandSpec;
@@ -36,11 +37,9 @@ public class App implements Callable<String> {
             throw new IllegalArgumentException("filePath1 or filePath2 is empty");
         }
         String diffResult = Differ.generate(filePath1, filePath2, outputFormat);
-        if (spec != null) {
-            spec.commandLine().getOut().print(diffResult);
-        } else {
-            System.out.println(diffResult);
-        }
+        PrintWriter out = spec.commandLine().getOut();
+        out.print(diffResult);
+        out.flush();
         return "0";
     }
 
