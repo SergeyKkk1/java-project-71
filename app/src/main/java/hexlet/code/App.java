@@ -36,7 +36,11 @@ public class App implements Callable<String> {
             throw new IllegalArgumentException("filePath1 or filePath2 is empty");
         }
         String diffResult = Differ.generate(filePath1, filePath2, outputFormat);
-        this.spec.commandLine().getOut().print(diffResult);
+        if (spec != null) {
+            spec.commandLine().getOut().print(diffResult);
+        } else {
+            System.out.print(diffResult);
+        }
         return "0";
     }
 

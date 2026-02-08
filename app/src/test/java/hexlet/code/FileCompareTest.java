@@ -30,7 +30,7 @@ public class FileCompareTest {
     void testJsonCompare() {
         int exitCode = cmd.execute("./src/test/resources/file1.json", "./src/test/resources/file2.json");
 
-        String actual = sw  .toString();
+        String actual = sw.toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
         assertEquals(expectedCompareResult(), actual);
     }
