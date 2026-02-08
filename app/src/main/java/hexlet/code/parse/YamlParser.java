@@ -6,7 +6,7 @@ import tools.jackson.dataformat.yaml.YAMLFactory;
 
 import java.util.Map;
 
-public class YamlParser {
+public final class YamlParser {
     private YamlParser() {
 
     }

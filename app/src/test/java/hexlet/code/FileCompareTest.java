@@ -11,7 +11,7 @@ import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileCompareTest {
+public final class FileCompareTest {
     private StringWriter sw;
     private CommandLine cmd;
 

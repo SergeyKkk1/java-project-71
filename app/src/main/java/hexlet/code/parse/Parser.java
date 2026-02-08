@@ -2,7 +2,7 @@ package hexlet.code.parse;
 
 import java.util.Map;
 
-public class Parser {
+public final class Parser {
     private Parser() {
     }
 

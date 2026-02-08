@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Differ {
+public final class Differ {
     private Differ() {
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class PlainFormatter {
+public final class PlainFormatter {
     private PlainFormatter() {
     }
 
