@@ -30,18 +30,18 @@ public class FileCompareTest {
     void testJsonCompare() {
         int exitCode = cmd.execute("./src/test/resources/file1.json", "./src/test/resources/file2.json");
 
-        String actual = sw.toString().trim();
+        String actual = sw  .toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedCompareResult().trim(), actual);
+        assertEquals(expectedCompareResult(), actual);
     }
 
     @Test
     void testYamlCompare() {
         int exitCode = cmd.execute("./src/test/resources/file1.yml", "./src/test/resources/file2.yml");
 
-        String actual = sw.toString().trim();
+        String actual = sw.toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedCompareResult().trim(), actual);
+        assertEquals(expectedCompareResult(), actual);
     }
 
     @Test
@@ -49,9 +49,9 @@ public class FileCompareTest {
         int exitCode = cmd.execute("-f", "plain",
                 "./src/test/resources/file1.json", "./src/test/resources/file2.json");
 
-        String actual = sw.toString().trim();
+        String actual = sw.toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedPlainResult().trim(), actual);
+        assertEquals(expectedPlainResult(), actual);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class FileCompareTest {
         int exitCode = cmd.execute("-f", "json",
                 "./src/test/resources/file1.json", "./src/test/resources/file2.json");
 
-        String actual = sw.toString().trim();
+        String actual = sw.toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
         assertEquals(expectedJsonResult(), actual);
     }

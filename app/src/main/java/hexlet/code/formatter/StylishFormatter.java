@@ -37,8 +37,8 @@ public class StylishFormatter {
                 .flatMap(Collection::stream)
                 .sorted(Map.Entry.comparingByKey())
                 .forEach(entry -> diffResultString.append("\s\s").append(entry.getValue()).append("\n"));
-        diffResultString.append("}\n");
-        return diffResultString.toString();
+        diffResultString.append("}");
+        return diffResultString.toString().trim();
     }
 }
 
