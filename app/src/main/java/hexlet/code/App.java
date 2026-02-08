@@ -39,7 +39,7 @@ public class App implements Callable<String> {
         if (spec != null) {
             spec.commandLine().getOut().print(diffResult);
         } else {
-            System.out.print(diffResult);
+            System.out.println(diffResult);
         }
         return "0";
     }
