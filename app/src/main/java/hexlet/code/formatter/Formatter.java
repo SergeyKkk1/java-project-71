@@ -1,6 +1,6 @@
 package hexlet.code.formatter;
 
-import hexlet.code.differ.DiffResult;
+import hexlet.code.DiffResult;
 
 public class Formatter {
     private Formatter() {
