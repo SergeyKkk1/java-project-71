@@ -11,7 +11,7 @@ public class JsonParser {
 
     }
 
-    public static Map<String, Object> getData(String content) throws IOException {
+    public static Map<String, Object> parse(String content) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(content, new TypeReference<>() {
         });

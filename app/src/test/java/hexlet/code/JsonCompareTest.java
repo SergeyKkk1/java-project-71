@@ -11,7 +11,7 @@ import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FlatJsonCompareTest {
+public class JsonCompareTest {
     private StringWriter sw;
     private CommandLine cmd;
 

@@ -1,7 +1,7 @@
 package hexlet.code;
 
 import hexlet.code.differ.Differ;
-import hexlet.code.parse.JsonParser;
+import hexlet.code.parse.Parser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -50,10 +50,10 @@ public class App implements Callable<String> {
         if (Files.exists(path1) && Files.exists(path2)) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath1));
             BufferedReader bufferedReader2 = new BufferedReader(new FileReader(filePath2));
-            bufferedReader.lines().forEach(stringBuilder1::append);
-            bufferedReader2.lines().forEach(stringBuilder2::append);
-            Map<String, Object> data1 = JsonParser.getData(stringBuilder1.toString());
-            Map<String, Object> data2 = JsonParser.getData(stringBuilder2.toString());
+            bufferedReader.lines().forEach(line -> stringBuilder1.append(line).append("\n"));
+            bufferedReader2.lines().forEach(line -> stringBuilder2.append(line).append("\n"));
+            Map<String, Object> data1 = Parser.parse(stringBuilder1.toString(), filePath1);
+            Map<String, Object> data2 = Parser.parse(stringBuilder2.toString(), filePath2);
             this.spec.commandLine().getOut().println(Differ.generate(data1, data2));
             return "0";
         } else {

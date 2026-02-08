@@ -12,3 +12,6 @@ make run-dist <filePath1> <filePath2>
 ```
 ### Flat json files comparison demo
 [![asciicast](https://asciinema.org/a/D9N2RHauZ5YWjAv6Ov64TuxAr.svg)](https://asciinema.org/a/D9N2RHauZ5YWjAv6Ov64TuxAr)
+
+### Flat YAML files comparison demo
+[![asciicast](https://asciinema.org/a/woprTYNc6klr9Vsj.svg)](https://asciinema.org/a/woprTYNc6klr9Vsj)
