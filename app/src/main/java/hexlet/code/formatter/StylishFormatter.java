@@ -1,44 +1,43 @@
 package hexlet.code.formatter;
 
+import hexlet.code.DiffAction;
+import hexlet.code.DiffEntry;
 import hexlet.code.DiffResult;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public final class StylishFormatter {
     private StylishFormatter() {
     }
 
     public static String getFormattedData(DiffResult diffResult) {
-        List<Map.Entry<String, String>> deletedKeysToString = diffResult.deletedKeys().stream()
-                .map(entry -> Map.entry(entry.getKey(), String.format("- %s: %s", entry.getKey(), entry.getValue())))
-                .toList();
-        List<Map.Entry<String, String>> addedKeysToString = diffResult.addedKeys().stream()
-                .map(entry -> Map.entry(entry.getKey(), String.format("+ %s: %s", entry.getKey(), entry.getValue())))
-                .toList();
-        List<Map.Entry<String, String>> changedKeysToString = new ArrayList<>();
-        for (int i = 0; i < diffResult.changedKeys().size(); i += 2) {
-            Map.Entry<String, Object> entryFromFirstFile = diffResult.changedKeys().get(i);
-            changedKeysToString.add(Map.entry(entryFromFirstFile.getKey(),
-                    String.format("- %s: %s", entryFromFirstFile.getKey(), entryFromFirstFile.getValue())));
-            Map.Entry<String, Object> entryFromSecondFile = diffResult.changedKeys().get(i + 1);
-            changedKeysToString.add(Map.entry(entryFromSecondFile.getKey(),
-                    String.format("+ %s: %s", entryFromSecondFile.getKey(), entryFromSecondFile.getValue())));
+        List<Map.Entry<String, String>> formattedEntries = new ArrayList<>();
+        for (DiffEntry entry : diffResult.entries()) {
+            if (entry.action() == DiffAction.DELETED) {
+                formattedEntries.add(Map.entry(entry.key(),
+                        String.format("- %s: %s", entry.key(), entry.oldValue())));
+            } else if (entry.action() == DiffAction.ADDED) {
+                formattedEntries.add(Map.entry(entry.key(),
+                        String.format("+ %s: %s", entry.key(), entry.newValue())));
+            } else if (entry.action() == DiffAction.CHANGED) {
+                formattedEntries.add(Map.entry(entry.key(),
+                        String.format("- %s: %s", entry.key(), entry.oldValue())));
+                formattedEntries.add(Map.entry(entry.key(),
+                        String.format("+ %s: %s", entry.key(), entry.newValue())));
+            } else if (entry.action() == DiffAction.UNCHANGED) {
+                formattedEntries.add(Map.entry(entry.key(),
+                        String.format("  %s: %s", entry.key(), entry.oldValue())));
+            }
         }
-        List<Map.Entry<String, String>> commonKeysToString = diffResult.commonKeys().stream()
-                .map(entry -> Map.entry(entry.getKey(), String.format("  %s: %s", entry.getKey(), entry.getValue())))
-                .toList();
         StringBuilder diffResultString = new StringBuilder();
         diffResultString.append("{\n");
-        Stream.of(deletedKeysToString, addedKeysToString, changedKeysToString, commonKeysToString)
-                .flatMap(Collection::stream)
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> diffResultString.append("\s\s").append(entry.getValue()).append("\n"));
+        formattedEntries.sort(Map.Entry.comparingByKey());
+        for (Map.Entry<String, String> entry : formattedEntries) {
+            diffResultString.append("  ").append(entry.getValue()).append("\n");
+        }
         diffResultString.append("}");
         return diffResultString.toString().trim();
     }
 }
-

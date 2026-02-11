@@ -6,19 +6,10 @@ public final class Parser {
     private Parser() {
     }
 
-    public static Map<String, Object> parse(String content, String filePath) throws Exception {
-        String format = getExtension(filePath);
-        return switch (format.toLowerCase()) {
-            case "json" -> JsonParser.parse(content);
-            case "yaml", "yml" -> YamlParser.parse(content);
-            default -> throw new IllegalArgumentException("Unknown format: " + format);
+    public static Map<String, Object> parse(String content, SupportedFileFormat format) throws Exception {
+        return switch (format) {
+            case JSON -> JsonParser.parse(content);
+            case YAML -> YamlParser.parse(content);
         };
-    }
-
-    private static String getExtension(String fileName) {
-        if (fileName == null || !fileName.contains(".")) {
-            return "";
-        }
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

@@ -1,13 +1,18 @@
 package hexlet.code;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import picocli.CommandLine;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,42 +31,15 @@ public final class FileCompareTest {
         cmd.setOut(new PrintWriter(sw));
     }
 
-    @Test
-    void testJsonCompare() {
-        int exitCode = cmd.execute("./src/test/resources/file1.json", "./src/test/resources/file2.json");
+    @ParameterizedTest
+    @MethodSource("formatCombinations")
+    void testAllFormatCombinations(String outputFormat, String filePath1,
+                                   String filePath2, String expectedFile) throws Exception {
+        int exitCode = cmd.execute("-f", outputFormat, filePath1, filePath2);
 
         String actual = sw.toString();
         assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedCompareResult(), actual);
-    }
-
-    @Test
-    void testYamlCompare() {
-        int exitCode = cmd.execute("./src/test/resources/file1.yml", "./src/test/resources/file2.yml");
-
-        String actual = sw.toString();
-        assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedCompareResult(), actual);
-    }
-
-    @Test
-    void testPlainFormat() {
-        int exitCode = cmd.execute("-f", "plain",
-                "./src/test/resources/file1.json", "./src/test/resources/file2.json");
-
-        String actual = sw.toString();
-        assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedPlainResult(), actual);
-    }
-
-    @Test
-    void testJsonFormat() {
-        int exitCode = cmd.execute("-f", "json",
-                "./src/test/resources/file1.json", "./src/test/resources/file2.json");
-
-        String actual = sw.toString();
-        assertEquals(0, exitCode, "Command should exit with code 0");
-        assertEquals(expectedJsonResult(), actual);
+        assertEquals(readExpected(expectedFile), actual);
     }
 
     @ParameterizedTest
@@ -72,128 +50,44 @@ public final class FileCompareTest {
         assertEquals(1, exitCode, "Command should exit with error code");
     }
 
-    private String expectedCompareResult() {
-        return """
-                {
-                    chars1: [a, b, c]
-                  - chars2: [d, e, f]
-                  + chars2: false
-                  - checked: false
-                  + checked: true
-                  - default: null
-                  + default: [value1, value2]
-                  - id: 45
-                  + id: null
-                  - key1: value1
-                  + key2: value2
-                    numbers1: [1, 2, 3, 4]
-                  - numbers2: [2, 3, 4, 5]
-                  + numbers2: [22, 33, 44, 55]
-                  - numbers3: [3, 4, 5]
-                  + numbers4: [4, 5, 6]
-                  + obj1: {nestedKey=value, isNested=true}
-                  - setting1: Some value
-                  + setting1: Another value
-                  - setting2: 200
-                  + setting2: 300
-                  - setting3: true
-                  + setting3: none
-                }
-                """;
+    @ParameterizedTest
+    @MethodSource("defaultFormatCombinations")
+    void testDefaultOutputFormat(String filePath1, String filePath2, String expectedFile) throws Exception {
+        int exitCode = cmd.execute(filePath1, filePath2);
+
+        String actual = sw.toString();
+        assertEquals(0, exitCode, "Command should exit with code 0");
+        assertEquals(readExpected(expectedFile), actual);
     }
 
-    private String expectedPlainResult() {
-        return """
-                Property 'chars2' was updated. From [complex value] to false
-                Property 'checked' was updated. From false to true
-                Property 'default' was updated. From null to [complex value]
-                Property 'id' was updated. From 45 to null
-                Property 'key1' was removed
-                Property 'key2' was added with value: 'value2'
-                Property 'numbers2' was updated. From [complex value] to [complex value]
-                Property 'numbers3' was removed
-                Property 'numbers4' was added with value: [complex value]
-                Property 'obj1' was added with value: [complex value]
-                Property 'setting1' was updated. From 'Some value' to 'Another value'
-                Property 'setting2' was updated. From 200 to 300
-                Property 'setting3' was updated. From true to 'none'
-                """;
+    private static Stream<Arguments> formatCombinations() {
+        return Stream.of(
+                Arguments.of("stylish", "./src/test/resources/file1.json",
+                        "./src/test/resources/file2.json", "expected_stylish.txt"),
+                Arguments.of("plain", "./src/test/resources/file1.json",
+                        "./src/test/resources/file2.json", "expected_plain.txt"),
+                Arguments.of("json", "./src/test/resources/file1.json",
+                        "./src/test/resources/file2.json", "expected_json.txt"),
+                Arguments.of("stylish", "./src/test/resources/file1.yml",
+                        "./src/test/resources/file2.yml", "expected_stylish.txt"),
+                Arguments.of("plain", "./src/test/resources/file1.yml",
+                        "./src/test/resources/file2.yml", "expected_plain.txt"),
+                Arguments.of("json", "./src/test/resources/file1.yml",
+                        "./src/test/resources/file2.yml", "expected_json.txt")
+        );
     }
 
-    private String expectedJsonResult() {
-        return """
-                [ {
-                  "key" : "chars1",
-                  "type" : "unchanged",
-                  "value" : [ "a", "b", "c" ]
-                }, {
-                  "key" : "chars2",
-                  "type" : "changed",
-                  "oldValue" : [ "d", "e", "f" ],
-                  "newValue" : false
-                }, {
-                  "key" : "checked",
-                  "type" : "changed",
-                  "oldValue" : false,
-                  "newValue" : true
-                }, {
-                  "key" : "default",
-                  "type" : "changed",
-                  "oldValue" : null,
-                  "newValue" : [ "value1", "value2" ]
-                }, {
-                  "key" : "id",
-                  "type" : "changed",
-                  "oldValue" : 45,
-                  "newValue" : null
-                }, {
-                  "key" : "key1",
-                  "type" : "deleted",
-                  "value" : "value1"
-                }, {
-                  "key" : "key2",
-                  "type" : "added",
-                  "value" : "value2"
-                }, {
-                  "key" : "numbers1",
-                  "type" : "unchanged",
-                  "value" : [ 1, 2, 3, 4 ]
-                }, {
-                  "key" : "numbers2",
-                  "type" : "changed",
-                  "oldValue" : [ 2, 3, 4, 5 ],
-                  "newValue" : [ 22, 33, 44, 55 ]
-                }, {
-                  "key" : "numbers3",
-                  "type" : "deleted",
-                  "value" : [ 3, 4, 5 ]
-                }, {
-                  "key" : "numbers4",
-                  "type" : "added",
-                  "value" : [ 4, 5, 6 ]
-                }, {
-                  "key" : "obj1",
-                  "type" : "added",
-                  "value" : {
-                    "nestedKey" : "value",
-                    "isNested" : true
-                  }
-                }, {
-                  "key" : "setting1",
-                  "type" : "changed",
-                  "oldValue" : "Some value",
-                  "newValue" : "Another value"
-                }, {
-                  "key" : "setting2",
-                  "type" : "changed",
-                  "oldValue" : 200,
-                  "newValue" : 300
-                }, {
-                  "key" : "setting3",
-                  "type" : "changed",
-                  "oldValue" : true,
-                  "newValue" : "none"
-                } ]
-                """;
+    private static Stream<Arguments> defaultFormatCombinations() {
+        return Stream.of(
+                Arguments.of("./src/test/resources/file1.json",
+                        "./src/test/resources/file2.json", "expected_stylish.txt"),
+                Arguments.of("./src/test/resources/file1.yml",
+                        "./src/test/resources/file2.yml", "expected_stylish.txt")
+        );
+    }
+
+    private String readExpected(String fileName) throws Exception {
+        Path path = Paths.get("./src/test/resources/", fileName).toAbsolutePath().normalize();
+        return Files.readString(path);
     }
 }

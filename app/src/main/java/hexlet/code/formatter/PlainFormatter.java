@@ -1,9 +1,10 @@
 package hexlet.code.formatter;
 
+import hexlet.code.DiffAction;
+import hexlet.code.DiffEntry;
 import hexlet.code.DiffResult;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,22 +15,16 @@ public final class PlainFormatter {
     public static String getFormattedData(DiffResult diffResult) {
         Map<String, String> formattedChanges = new TreeMap<>();
 
-        for (Map.Entry<String, Object> entry : diffResult.deletedKeys()) {
-            formattedChanges.put(entry.getKey(), "Property '" + entry.getKey() + "' was removed");
-        }
-
-        for (Map.Entry<String, Object> entry : diffResult.addedKeys()) {
-            formattedChanges.put(entry.getKey(), "Property '" + entry.getKey() + "' was added with value: "
-                    + formatValue(entry.getValue()));
-        }
-
-        List<Map.Entry<String, Object>> changedKeys = diffResult.changedKeys();
-        for (int i = 0; i < changedKeys.size(); i += 2) {
-            Map.Entry<String, Object> oldEntry = changedKeys.get(i);
-            Map.Entry<String, Object> newEntry = changedKeys.get(i + 1);
-
-            formattedChanges.put(oldEntry.getKey(), "Property '" + oldEntry.getKey() + "' was updated. From "
-                    + formatValue(oldEntry.getValue()) + " to " + formatValue(newEntry.getValue()));
+        for (DiffEntry entry : diffResult.entries()) {
+            if (entry.action() == DiffAction.DELETED) {
+                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was removed");
+            } else if (entry.action() == DiffAction.ADDED) {
+                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was added with value: "
+                        + formatValue(entry.newValue()));
+            } else if (entry.action() == DiffAction.CHANGED) {
+                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was updated. From "
+                        + formatValue(entry.oldValue()) + " to " + formatValue(entry.newValue()));
+            }
         }
 
         return String.join("\n", formattedChanges.values());

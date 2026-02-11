@@ -1,0 +1,81 @@
+{
+  "entries" : [ {
+    "key" : "setting1",
+    "oldValue" : "Some value",
+    "newValue" : "Another value",
+    "action" : "CHANGED"
+  }, {
+    "key" : "setting2",
+    "oldValue" : 200,
+    "newValue" : 300,
+    "action" : "CHANGED"
+  }, {
+    "key" : "setting3",
+    "oldValue" : true,
+    "newValue" : "none",
+    "action" : "CHANGED"
+  }, {
+    "key" : "key1",
+    "oldValue" : "value1",
+    "newValue" : null,
+    "action" : "DELETED"
+  }, {
+    "key" : "numbers1",
+    "oldValue" : [ 1, 2, 3, 4 ],
+    "newValue" : [ 1, 2, 3, 4 ],
+    "action" : "UNCHANGED"
+  }, {
+    "key" : "numbers2",
+    "oldValue" : [ 2, 3, 4, 5 ],
+    "newValue" : [ 22, 33, 44, 55 ],
+    "action" : "CHANGED"
+  }, {
+    "key" : "id",
+    "oldValue" : 45,
+    "newValue" : null,
+    "action" : "CHANGED"
+  }, {
+    "key" : "default",
+    "oldValue" : null,
+    "newValue" : [ "value1", "value2" ],
+    "action" : "CHANGED"
+  }, {
+    "key" : "checked",
+    "oldValue" : false,
+    "newValue" : true,
+    "action" : "CHANGED"
+  }, {
+    "key" : "numbers3",
+    "oldValue" : [ 3, 4, 5 ],
+    "newValue" : null,
+    "action" : "DELETED"
+  }, {
+    "key" : "chars1",
+    "oldValue" : [ "a", "b", "c" ],
+    "newValue" : [ "a", "b", "c" ],
+    "action" : "UNCHANGED"
+  }, {
+    "key" : "chars2",
+    "oldValue" : [ "d", "e", "f" ],
+    "newValue" : false,
+    "action" : "CHANGED"
+  }, {
+    "key" : "key2",
+    "oldValue" : null,
+    "newValue" : "value2",
+    "action" : "ADDED"
+  }, {
+    "key" : "numbers4",
+    "oldValue" : null,
+    "newValue" : [ 4, 5, 6 ],
+    "action" : "ADDED"
+  }, {
+    "key" : "obj1",
+    "oldValue" : null,
+    "newValue" : {
+      "nestedKey" : "value",
+      "isNested" : true
+    },
+    "action" : "ADDED"
+  } ]
+}

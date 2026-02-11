@@ -33,12 +33,17 @@ public final class App implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        if (filePath1 == null || filePath2 == null || filePath1.isEmpty() || filePath2.isEmpty()) {
-            throw new IllegalArgumentException("filePath1 or filePath2 is empty");
+        try {
+            if (filePath1 == null || filePath2 == null || filePath1.isEmpty() || filePath2.isEmpty()) {
+                throw new IllegalArgumentException("filePath1 or filePath2 is empty");
+            }
+            String diffResult = Differ.generate(filePath1, filePath2, outputFormat);
+            spec.commandLine().getOut().println(diffResult);
+            return "0";
+        } catch (Exception e) {
+            spec.commandLine().getErr().println(e.getMessage());
+            throw e;
         }
-        String diffResult = Differ.generate(filePath1, filePath2, outputFormat);
-        spec.commandLine().getOut().println(diffResult);
-        return "0";
     }
 
     public CommandSpec getSpec() {
