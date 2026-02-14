@@ -44,7 +44,7 @@ public final class Differ {
         return switch (format.toLowerCase()) {
             case "json" -> SupportedFileFormat.JSON;
             case "yaml", "yml" -> SupportedFileFormat.YAML;
-            default -> throw new IllegalArgumentException("Unknown format: " + format);
+            default -> throw new IllegalArgumentException("Unsupported format: " + format);
         };
     }
 

@@ -4,30 +4,31 @@ import hexlet.code.DiffAction;
 import hexlet.code.DiffEntry;
 import hexlet.code.DiffResult;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public final class PlainFormatter {
     private PlainFormatter() {
     }
 
     public static String getFormattedData(DiffResult diffResult) {
-        Map<String, String> formattedChanges = new TreeMap<>();
+        List<String> formattedChanges = new ArrayList<>();
 
         for (DiffEntry entry : diffResult.entries()) {
             if (entry.action() == DiffAction.DELETED) {
-                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was removed");
+                formattedChanges.add("Property '" + entry.key() + "' was removed");
             } else if (entry.action() == DiffAction.ADDED) {
-                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was added with value: "
+                formattedChanges.add("Property '" + entry.key() + "' was added with value: "
                         + formatValue(entry.newValue()));
             } else if (entry.action() == DiffAction.CHANGED) {
-                formattedChanges.put(entry.key(), "Property '" + entry.key() + "' was updated. From "
+                formattedChanges.add("Property '" + entry.key() + "' was updated. From "
                         + formatValue(entry.oldValue()) + " to " + formatValue(entry.newValue()));
             }
         }
 
-        return String.join("\n", formattedChanges.values());
+        return String.join("\n", formattedChanges);
     }
 
     private static String formatValue(Object value) {

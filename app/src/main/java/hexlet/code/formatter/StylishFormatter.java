@@ -33,7 +33,6 @@ public final class StylishFormatter {
         }
         StringBuilder diffResultString = new StringBuilder();
         diffResultString.append("{\n");
-        formattedEntries.sort(Map.Entry.comparingByKey());
         for (Map.Entry<String, String> entry : formattedEntries) {
             diffResultString.append("  ").append(entry.getValue()).append("\n");
         }
