@@ -2,7 +2,6 @@ package hexlet.code;
 
 import hexlet.code.formatter.Formatter;
 import hexlet.code.parse.Parser;
-import hexlet.code.parse.SupportedFileFormat;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,17 +34,8 @@ public final class Differ {
             throw new IllegalArgumentException("File not found: " + filePath);
         }
         String content = Files.readString(path);
-        SupportedFileFormat format = getFileFormat(filePath);
-        return Parser.parse(content, format);
-    }
-
-    private static SupportedFileFormat getFileFormat(String filePath) {
         String format = getExtension(filePath);
-        return switch (format.toLowerCase()) {
-            case "json" -> SupportedFileFormat.JSON;
-            case "yaml", "yml" -> SupportedFileFormat.YAML;
-            default -> throw new IllegalArgumentException("Unsupported format: " + format);
-        };
+        return Parser.parse(content, format);
     }
 
     private static String getExtension(String fileName) {

@@ -1,6 +1,6 @@
 package hexlet.code.parse;
 
-public enum SupportedFileFormat {
+public enum SupportedDataFormat {
     JSON,
     YAML
 }
